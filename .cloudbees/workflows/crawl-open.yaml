@@ -1,3 +1,6 @@
+##
+## Example of policy using legacy subject data (implicit vulnerability_scan_legacy)
+## 
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 name: crawl-open
@@ -58,7 +61,7 @@ jobs:
           echo "URL: ${{ cloudbees.api.url }}"
 
       - name: check-vulnerabilities-with-public-action
-        uses: cloudbees-io/policy-check@wip
+        uses: cloudbees-io/policy-check
         with:
           policy: 22f76106-3661-409f-b654-42ab4a052fe4
           input-file: /cloudbees/workspace/policy-input.json
