@@ -11,11 +11,11 @@ jobs:
   scan-and-evaluate:
     steps:
       - name: checkout-source-code
-        uses: cloudbees-io/checkout@v1
+        uses: cloudbees-io/checkout@v2
 
       - name: Run Gosec Scan
         id: gosec-step
-        uses: cloudbees-io/gosec-plugin@cbp-41815 # was v1
+        uses: cloudbees-io/gosec-plugin@CBP-40852 # was v1
 
       - id: print-gosec-outputs
         name: Print gosec outputs
@@ -30,18 +30,18 @@ jobs:
           echo "Policy Subject: ${{ steps.gosec-step.outputs.policy-subject }}"
 
       # temporry transform, {} -> []
-      - id: wrap-policy-subject                                                                                                                                                                                                                                                                                                                           
-        name: Wrap policy subject as array                                                                                                                                                                                                                                                                                                                
-        uses: docker://alpine:latest                                                                                                                                                                                                                                                                                                                      
-        run: |                                                                                                                                                                                                                                                                                                                                            
-            apk add --no-cache jq                                                                                                                                                                                                                                                                                                                           
-            echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]' > /cloudbees/workspace/policy-input.json    
-            echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]'   
+      # - id: wrap-policy-subject                                                                                                                                                                                                                                                                                                                           
+      #   name: Wrap policy subject as array                                                                                                                                                                                                                                                                                                                
+      #   uses: docker://alpine:latest                                                                                                                                                                                                                                                                                                                      
+      #   run: |                                                                                                                                                                                                                                                                                                                                            
+      #       apk add --no-cache jq                                                                                                                                                                                                                                                                                                                           
+      #       echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]' > /cloudbees/workspace/policy-input.json    
+      #       echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]'   
 
       # policy: crit lte 2 -> block
       - name: check-vulnerabilities
         uses: cloudbees-io/policy-check@main
         with:
           policy: cf78ccd6-b125-4378-ab1f-078ce6fe8d1d
-          input-file: /cloudbees/workspace/policy-input.json
-          #input-data: ${{ steps.gosec-step.outputs.policy-subject }}
+          # input-file: /cloudbees/workspace/policy-input.json
+          input-data: ${{ steps.gosec-step.outputs.policy-subject }}
