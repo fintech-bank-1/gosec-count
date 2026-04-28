@@ -35,12 +35,13 @@ jobs:
         uses: docker://alpine:latest                                                                                                                                                                                                                                                                                                                      
         run: |                                                                                                                                                                                                                                                                                                                                            
             apk add --no-cache jq                                                                                                                                                                                                                                                                                                                           
-            echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]' > /cloudbees/workspace/policy-input.json       
+            echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]' > /cloudbees/workspace/policy-input.json    
+            echo '${{ steps.gosec-step.outputs.policy-subject }}' | jq -c '[.]'   
 
       # policy: crit lte 2 -> block
       - name: check-vulnerabilities
         uses: cloudbees-io/policy-check@main
         with:
-          policy: 5a383327-7095-48c9-8e8f-a6673c161e7d
+          policy: cf78ccd6-b125-4378-ab1f-078ce6fe8d1d
           input-file: /cloudbees/workspace/policy-input.json
           #input-data: ${{ steps.gosec-step.outputs.policy-subject }}
