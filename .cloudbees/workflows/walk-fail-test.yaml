@@ -44,4 +44,4 @@ jobs:
         with:
           policy: cf78ccd6-b125-4378-ab1f-078ce6fe8d1d
           # input-file: /cloudbees/workspace/policy-input.json
-          input-data:  '[{"type":"sast_scan","data":{"completed":true,"scanned_at":"2026-04-29T10:00:00Z","commit_sha":"a12c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"}}]' 
+          input-data:  '[{"type":"sast_scan","data":{"completed":false,"scanned_at":"2026-04-29T10:00:00Z","commit_sha":"a12c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"}}]' 
