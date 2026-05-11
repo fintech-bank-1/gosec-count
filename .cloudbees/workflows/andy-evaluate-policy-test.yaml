@@ -26,12 +26,42 @@ permissions:
 jobs:
   check:
     steps:
-      - name: Create test input
+      - name: Build a test policy subject
         uses: docker://alpine:latest
         shell: sh
         run: |
+          CRITICAL=0
+          HIGH=0
+          MEDIUM=0
+          LOW=0
+          TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
           cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
-          [{"type": "vulnerability_scan_summary","data":{"summary":{"by_severity":{"total":0,"critical":${{ inputs.critical }},"high":${{ inputs.high }},"medium":${{ inputs.medium }},"low":${{ inputs.low }} }}}}]
+          [{
+            "type": "vulnerability_scan_summary",
+            "data": {
+              "summary": {
+                "by_severity": {
+                  "total": ${TOTAL},
+                  "critical": ${CRITICAL},
+                  "high": ${HIGH},
+                  "medium": ${MEDIUM},
+                  "low": ${LOW}
+                }
+              }
+            },
+            "findings": [
+              {
+                "code": "CWE-22",
+                "severity": "MEDIUM",
+                "location": "/zip_extract.go#L13"
+              },
+              {
+                "code": "CWE-703",
+                "severity": "LOW",
+                "location": "/main.go#L31"
+              }
+            ]  
+          }]
           EOF
       - name: Print test input
         uses: docker://alpine:latest
