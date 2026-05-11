@@ -70,7 +70,7 @@ jobs:
           cat "$CLOUDBEES_OUTPUTS/policy-subject"
       - id: check-vulnerabilities
         name: Check vulnerabilities
-        uses: ./actions/check-policy
+        uses: cloudbees-io/policy-check
         with:
           policy: ${{ inputs.policy }}
-          input-file: "$CLOUDBEES_OUTPUTS/policy-subject"
+          input-file: /cloudbees/workspace/policy-input.json    
