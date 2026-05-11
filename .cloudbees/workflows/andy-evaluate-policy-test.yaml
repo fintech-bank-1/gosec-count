@@ -73,4 +73,4 @@ jobs:
         uses: cloudbees-io/policy-check
         with:
           policy: ${{ inputs.policy }}
-          input-file: /cloudbees/workspace/policy-input.json    
+          input-file: "$CLOUDBEES_OUTPUTS/policy-subject"
