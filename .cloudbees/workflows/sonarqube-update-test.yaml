@@ -20,6 +20,6 @@ jobs:
         uses: cloudbees-io/sonarqube-plugin@CBP-41936
         with:
           url: 'https://cbsonarqube.saas-preprod.beescloud.com'
-          username: ${{ secrets.SONARQUBE_USERNAME }}
-          password: ${{ secrets.SONARQUBE_PASSWORD }}
+          username: ${{ secrets.CB_SONARQUBE_USERNAME }}
+          password: ${{ secrets.CB_SONARQUBE_PASSWORD }}
           
