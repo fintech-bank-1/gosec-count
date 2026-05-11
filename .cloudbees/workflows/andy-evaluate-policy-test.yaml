@@ -30,11 +30,7 @@ jobs:
         uses: docker://alpine:latest
         shell: sh
         run: |
-          CRITICAL=0
-          HIGH=0
-          MEDIUM=0
-          LOW=0
-          TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
+          TOTAL=$(( ${{ inputs.critical }} + ${{ inputs.high }} + ${{ inputs.medium }} + ${{ inputs.low }} ))
           cat > /cloudbees/workspace/test-input.json << EOF
           [{
             "type": "vulnerability_scan",
@@ -42,10 +38,10 @@ jobs:
               "summary": {
                 "by_severity": {
                   "total": ${TOTAL},
-                  "critical": ${CRITICAL},
-                  "high": ${HIGH},
-                  "medium": ${MEDIUM},
-                  "low": ${LOW}
+                  "critical": ${{ inputs.critical }},
+                  "high": ${{ inputs.high }},
+                  "medium": ${{ inputs.medium }},
+                  "low": ${{ inputs.low }}
                 }
               }
             },
