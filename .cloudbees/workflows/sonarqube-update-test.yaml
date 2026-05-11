@@ -19,7 +19,7 @@ jobs:
       - name: Setup sonarqube explicit scanner with community edition
         uses: cloudbees-io/sonarqube-plugin@CBP-41936
         with:
-          url: 'https://cbsonarqube.saas-preprod.beescloud.com'
+          url: 'https://cbsonarqube.saas-preprod.beescloud.com/'
           username: ${{ secrets.CB_SONARQUBE_USERNAME }}
           password: ${{ secrets.CB_SONARQUBE_PASSWORD }}
           ref: main
