@@ -1,4 +1,4 @@
-name: filterbypositiontest
+name: filter-by-position-test
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 on:
