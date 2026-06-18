@@ -59,4 +59,4 @@ jobs:
     with:
       input-data: ${{ needs.scan-and-evaluate.outputs.policy-subject }}
       checkpoint-type: workflow
-      checkpoint-position: within
+      checkpoint-position: before
