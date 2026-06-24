@@ -17,21 +17,18 @@ jobs:
         uses: docker://alpine:latest
         shell: sh
         run: |
-          CRITICAL=0
-          MEDIUM=0
-          LOW=0
-          TOTAL= 20
+        
           cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
           [{
             "type": "vulnerability_scan",
             "data": {
               "summary": {
                 "by_severity": {
-                  "total": ${TOTAL},
-                  "critical": ${CRITICAL},
+                  "total": 32,
+                  "critical": 20,
                   "high":"avbc",
-                  "medium": ${MEDIUM},
-                  "low": ${LOW}
+                  "medium": "qwe",
+                  "low": 12
                 }
               }
             }
