@@ -30,7 +30,6 @@ jobs:
                 "by_severity": {
                   "total": ${TOTAL},
                   "critical": ${CRITICAL},
-                  "high":${HIGH},
                   "medium": ${MEDIUM},
                   "low": ${LOW}
                 }
