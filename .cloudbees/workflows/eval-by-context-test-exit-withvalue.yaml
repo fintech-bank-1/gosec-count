@@ -1,0 +1,62 @@
+name: eval-by-context-test-exit-withvalue
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+on:
+  workflow_dispatch: {}
+permissions:
+  scm-token-own: read
+  scm-token-org: read
+  id-token: write
+jobs:
+  scan-and-evaluate:
+    outputs:
+      policy-subject: ${{ steps.make-input.outputs.policy-subject }}
+    steps:
+      - id: make-input
+        name: Build a test policy subject
+        uses: docker://alpine:latest
+        shell: sh
+        run: |
+          CRITICAL=0
+          MEDIUM=0
+          HIGH=47
+          LOW=0
+          TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
+          cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
+          [{
+            "type": "vulnerability_scan",
+            "data": {
+              "summary": {
+                "by_severity": {
+                  "total": ${TOTAL},
+                  "critical": ${CRITICAL},
+                  "high":${HIGH},
+                  "medium": ${MEDIUM},
+                  "low": ${LOW}
+                }
+              }
+            }
+          }]
+          EOF
+
+      - name: Print policy input
+        uses: docker://alpine:latest
+        shell: sh
+        env:
+          ORG: ${{ cloudbees.org.id }}
+          ACCESS_KEY: ${{ cloudbees.api.token }}
+          URL: ${{ cloudbees.api.url }}
+          POLICY_SUBJECT: ${{ steps.make-input.outputs.policy-subject }}
+        run: |
+          echo "$URL"
+          echo "$ORG"
+          echo "Authorization: Bearer $ACCESS_KEY"
+          echo "$POLICY_SUBJECT"
+  policy-evaluation:
+    uses: cloudbees-io/policy-utils/evaluate-policy-context/workflow.yml@CBP-47577
+    needs:
+      - scan-and-evaluate
+    with:
+      input-data: ${{ needs.scan-and-evaluate.outputs.policy-subject }}
+      checkpoint-type: workflow
+      checkpoint-position: exit
