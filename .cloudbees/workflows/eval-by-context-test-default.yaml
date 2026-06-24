@@ -1,4 +1,4 @@
-name: eval-by-context-test-default
+name: eval-by-context-test-within-withvalue
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 on:
