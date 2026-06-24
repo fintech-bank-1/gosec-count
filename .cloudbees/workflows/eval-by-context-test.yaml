@@ -19,6 +19,7 @@ jobs:
         run: |
           CRITICAL=0
           MEDIUM=0
+          HIGH=47
           LOW=0
           TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
           cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
@@ -29,7 +30,6 @@ jobs:
                 "by_severity": {
                   "total": ${TOTAL},
                   "critical": ${CRITICAL},
-                  "high": ${HIGH},
                   "medium": ${MEDIUM},
                   "low": ${LOW}
                 }
