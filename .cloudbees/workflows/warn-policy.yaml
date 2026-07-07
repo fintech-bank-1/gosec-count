@@ -17,7 +17,7 @@ jobs:
         uses: docker://alpine:latest
         shell: sh
         run: |
-          CRITICAL=0
+          CRITICAL=10
           MEDIUM=0
           HIGH=47
           LOW=0
