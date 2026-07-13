@@ -18,7 +18,7 @@ jobs:
         shell: sh
         run: |
           CRITICAL=10
-          MEDIUM=0
+          MEDIUM=20
           HIGH=47
           LOW=0
           TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
