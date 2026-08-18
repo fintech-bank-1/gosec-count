@@ -10,34 +10,11 @@ permissions:
 jobs:
   scan-and-evaluate:
     outputs:
-      policy-subject: ${{ steps.make-input.outputs.policy-subject }}
+      policy-subject: ${{ steps.gosec-step.outputs.policy-subject }}
     steps:
-      - id: make-input
-        name: Build a test policy subject
-        uses: docker://alpine:latest
-        shell: sh
-        run: |
-          CRITICAL=10
-          MEDIUM=20
-          HIGH=47
-          LOW=0
-          TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
-          cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
-          [{
-            "type": "vulnerability_scan",
-            "data": {
-              "summary": {
-                "by_severity": {
-                  "total": ${TOTAL},
-                  "critical": ${CRITICAL},
-                  "high": ${HIGH},
-                  "medium": ${MEDIUM},
-                  "low": ${LOW}
-                }
-              }
-            }
-          }]
-          EOF
+      - name: Run Gosec Scan
+        id: gosec-step
+        uses: cloudbees-io/gosec-plugin@v2
 
       - name: Print policy input
         uses: docker://alpine:latest
