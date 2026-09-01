@@ -1,0 +1,72 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: L4-Auto-workflow
+on:
+  workflow_dispatch: {}
+permissions:
+  scm-token-own: read
+  scm-token-org: read
+  id-token: write
+jobs:
+  snyk-scan-job:
+    outputs:
+      policy-subject: ${{ steps.snyk-sast-step.outputs.policy-subject }}
+    steps:
+
+      - name: checkout-source-code
+        uses: cloudbees-io/checkout@v1
+        with:
+          repository: https://github.com/CBC-Git-two/auto-pe-sast-scan-repo
+          path: auto-pe-sast-scan-repo
+
+      - name: Run Snyk Sast
+        id: snyk-sast-step
+        uses: cloudbees-io/snyk-sast-plugin@v1
+        with:
+          snyk-token: ${{ secrets.SNYK_TOKEN }}
+          org-id: ${{ vars.SNYK_ORG_ID }}
+          workspace-dir: auto-pe-sast-scan-repo
+
+      # Printing output for testing purpose
+      - id: print-snyk-sast-output
+        name: Print Snyk sast outputs
+        uses: docker://alpine:latest
+        run: |
+          echo "Snyk SAST outputs:"
+          echo "Critical: ${{ steps.snyk-sast-step.outputs.critical-count }}"
+          echo "Very high: ${{ steps.snyk-sast-step.outputs.very-high-count }}"
+          echo "High: ${{ steps.snyk-sast-step.outputs.high-count }}"
+          echo "Medium: ${{ steps.snyk-sast-step.outputs.medium-count }}"
+          echo "Low: ${{ steps.snyk-sast-step.outputs.low-count }}"
+          echo "Policy Subject: ${{ steps.snyk-sast-step.outputs.policy-subject }}"
+
+  gitleaks-scan-and-evaluate:
+    needs:
+      - snyk-scan-job
+    outputs:
+      policy-subject: ${{ steps.gitleaks-step.outputs.policy-subject }}
+    steps:
+
+      - name: checkout-source-code
+        uses: cloudbees-io/checkout@v2
+        with:
+          repository: https://github.com/CBC-Git-two/auto-pe-secret-scan-repo
+          path: auto-pe-secret-scan-repo
+
+      - name: Run gitleaks Scan
+        id: gitleaks-step
+        uses: cloudbees-io/gitleaks-plugin@v1
+        with:
+          workspace-dir: "auto-pe-secret-scan-repo"
+
+      - id: print-gitleaks-outputs
+        name: Print gitleaks outputs
+        uses: docker://alpine:latest
+        run: |
+          echo "Gitleaks outputs:"
+          echo "Critical: ${{ steps.gitleaks-step.outputs.critical-count }}"
+          echo "Very high: ${{ steps.gitleaks-step.outputs.very-high-count }}"
+          echo "High: ${{ steps.gitleaks-step.outputs.high-count }}"
+          echo "Medium: ${{ steps.gitleaks-step.outputs.medium-count }}"
+          echo "Low: ${{ steps.gitleaks-step.outputs.low-count }}"
+          echo "Policy Subject: ${{ steps.gitleaks-step.outputs.policy-subject }}"
