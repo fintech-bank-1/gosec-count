@@ -16,8 +16,7 @@ jobs:
       - name: Run gitleaks Scan
         id: gitleaks-step
         uses: cloudbees-io/gitleaks-plugin@v1
-        with:
-            workspace-dir: "auto-pe-secret-scan-repo1"
+
   independent-job:
     needs:
       - scan-job
