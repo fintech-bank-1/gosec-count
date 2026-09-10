@@ -1,0 +1,70 @@
+  name: Rvi-required-sast-scan
+  apiVersion: automation.cloudbees.io/v1alpha1
+  kind: workflow
+  on:
+    workflow_dispatch: {}
+  permissions:
+    id-token: write
+  jobs:
+    print-context:
+      steps:
+        - name: Print CloudBees context
+          uses: docker://alpine:latest
+          shell: sh
+          env:
+            API_URL:      ${{ cloudbees.api.url }}
+            ACCESS_TOKEN: ${{ cloudbees.api.token }}
+            COMPONENT_ID: ${{ cloudbees.component.id }}
+            ORG_ID:       ${{ cloudbees.org.id }}
+            RUN_ID:       ${{ cloudbees.run_id }}
+            SCM_BRANCH:   ${{ cloudbees.scm.branch }}
+            SCM_REPO:     ${{ cloudbees.scm.repository }}
+            SCM_SHA:      ${{ cloudbees.scm.sha }}
+          run: |
+            echo "=== CloudBees Context ==="
+            echo "api.url:          $API_URL"
+            echo "api.token:        ${ACCESS_TOKEN:0:10}... (truncated)"
+            echo "component.id:     $COMPONENT_ID"
+            echo "org.id:           $ORG_ID"
+            echo "run_id:           $RUN_ID"
+            echo "scm.branch:       $SCM_BRANCH"
+            echo "scm.repository:   $SCM_REPO"
+            echo "scm.sha:          $SCM_SHA"
+    scan-and-evaluate:
+      outputs:
+         policy-subject: ${{ steps.gosec-step.outputs.policy-subject }}
+      steps:
+        - name: checkout-source-code
+          uses: cloudbees-io/checkout@v2
+
+        - name: Run Gosec Scan
+          id: gosec-step
+          uses: cloudbees-io/gosec-plugin
+
+        - id: print-gosec-outputs
+          name: Print gosec outputs
+          uses: docker://alpine:latest
+          run: |
+            echo "Gosec outputs:"
+            echo "Critical: ${{ steps.gosec-step.outputs.critical-count }}"
+            echo "Very high: ${{ steps.gosec-step.outputs.very-high-count }}"
+            echo "High: ${{ steps.gosec-step.outputs.high-count }}"
+            echo "Medium: ${{ steps.gosec-step.outputs.medium-count }}"
+            echo "Low: ${{ steps.gosec-step.outputs.low-count }}"
+            echo "Policy Subject: ${{ steps.gosec-step.outputs.policy-subject }}"
+    # policy-evaluation:
+    #   uses: cloudbees-io/policy-utils/evaluate-policy-context/workflow.yml@v2
+    #   needs:
+    #     - scan-and-evaluate
+    #   with:
+    #     input-data: ${{ needs.scan-and-evaluate.outputs.policy-subject }}
+    #     checkpoint-type: workflow
+    #     checkpoint-position: within            
+    build: 
+      needs: scan-and-evaluate
+      steps:
+        - name: Build something
+          uses: docker://alpine:latest
+          shell: sh
+          run: echo "Building..."
+
