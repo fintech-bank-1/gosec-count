@@ -51,7 +51,15 @@
             echo "High: ${{ steps.gosec-step.outputs.high-count }}"
             echo "Medium: ${{ steps.gosec-step.outputs.medium-count }}"
             echo "Low: ${{ steps.gosec-step.outputs.low-count }}"
-            echo "Policy Subject: ${{ steps.gosec-step.outputs.policy-subject }}"         
+            echo "Policy Subject: ${{ steps.gosec-step.outputs.policy-subject }}"       
+    policy-evaluation:
+       uses: cloudbees-io/policy-utils/evaluate-policy-context/workflow.yml@v2
+       needs:
+         - scan-and-evaluate
+       with:
+         input-data: ${{ needs.scan-and-evaluate.outputs.policy-subject }}
+         checkpoint-type: workflow
+         checkpoint-position: exit       
     build: 
       needs: scan-and-evaluate
       steps:
