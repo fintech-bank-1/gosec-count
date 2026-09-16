@@ -14,15 +14,15 @@ metadata:
 jobs:
   checkout:
     outputs:
-      policy-subject: ${{ steps.gitleaks-step.outputs.policy-subject }}
+      policy-subject: ${{ steps.run-scan.outputs.policy-subject }}
     steps:
       - uses: cloudbees-io/checkout@v1
         name: checkout
         kind: scan
-      - name: run scna
+      - name: run-scan
         uses: cloudbees-io/gosec-plugin@v1
         kind: scan
-      - run: 'echo "Policy Subject: ${{ steps.gitleaks-step.outputs.policy-subject }}"'
+      - run: 'echo "Policy Subject: ${{ steps.run-scan.outputs.policy-subject }}"'
         uses: docker://alpine:3.20
         name: echo scan
   job:
