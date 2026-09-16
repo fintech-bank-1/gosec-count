@@ -14,7 +14,7 @@ metadata:
 jobs:
   checkout:
     outputs:
-      policy-subject: ${{ steps.run-scan.outputs.policy-subject }}
+      policy-subject: ${{ steps.step1.outputs.policy-subject }}
     steps:
       - uses: cloudbees-io/checkout@v1
         name: checkout
@@ -22,7 +22,7 @@ jobs:
       - name: run-scan
         uses: cloudbees-io/gosec-plugin@v1
         kind: scan
-      - run: 'echo "Policy Subject: ${{ steps.run-scan.outputs.policy-subject }}"'
+      - run: 'echo "Policy Subject: ${{ steps.step1.outputs.policy-subject }}"'
         uses: docker://alpine:3.20
         name: echo scan
   job:
