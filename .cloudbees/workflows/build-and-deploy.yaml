@@ -8,7 +8,10 @@ permissions:
   scm-token-org: read
   id-token: write
 jobs:
+  call-nested-reusable:
+    uses: .cloudbees/workflows/build_workflow.yaml
   scan-and-evaluate:
+    needs: call-nested-reusable
     outputs:
       policy-subject: ${{ steps.gosec-step.outputs.policy-subject }}
     steps:
@@ -44,8 +47,3 @@ jobs:
           echo "$ORG"
           echo "Authorization: Bearer $ACCESS_KEY"
           echo "$POLICY_SUBJECT"
-      - name: Print policy input
-        uses: docker://alpine:latest
-        shell: sh
-        run: |
-          echo "destination:"
