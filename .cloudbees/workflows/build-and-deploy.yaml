@@ -8,10 +8,7 @@ permissions:
   scm-token-org: read
   id-token: write
 jobs:
-  call-nested-reusable:
-    uses: .cloudbees/workflows/build_workflow.yaml
   scan-and-evaluate:
-    needs: call-nested-reusable
     outputs:
       policy-subject: ${{ steps.gosec-step.outputs.policy-subject }}
     steps:
