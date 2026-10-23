@@ -44,3 +44,12 @@ jobs:
           echo "$ORG"
           echo "Authorization: Bearer $ACCESS_KEY"
           echo "$POLICY_SUBJECT"
+  deploy:
+    needs:
+      scan-and-evaluate
+    steps:
+       - name: Print policy input
+         uses: docker://alpine:latest
+         shell: sh
+         run: |
+            echo "deployed"
