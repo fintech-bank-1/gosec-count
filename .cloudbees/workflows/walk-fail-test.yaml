@@ -5,4 +5,4 @@ on:
   workflow_dispatch: {}
 jobs:
   call-callee:
-    uses: ./.cloudbees/workflows/walk-fail.yaml
+    uses: fintech-bank-1/gosec-count/.cloudbees/workflows/walk-fail.yaml@main
