@@ -1,4 +1,4 @@
-name: cbp-69966-rw-6
+name: crawl-open
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 on:
