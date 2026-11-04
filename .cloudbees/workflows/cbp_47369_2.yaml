@@ -1,61 +1,36 @@
-name: CBP_47369_2
+name: cbp-69966-rw-4
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 on:
-  workflow_dispatch: {}
-permissions:
-  scm-token-own: read
-  scm-token-org: read
-  id-token: write
+  workflow_call: {}
 jobs:
-  scan-and-evaluate:
-    outputs:
-      policy-subject: ${{ steps.make-input.outputs.policy-subject }}
+  rw4-job-1:
     steps:
-      - id: make-input
-        name: Build a test policy subject
+      - name: noop
         uses: docker://alpine:latest
         shell: sh
-        run: |
-          CRITICAL=0
-          MEDIUM=49
-          HIGH=9
-          LOW=0
-          TOTAL=$(( $CRITICAL + $HIGH + $MEDIUM + $LOW ))
-          cat > "$CLOUDBEES_OUTPUTS/policy-subject" << EOF
-          [{
-            "type": "vulnerability_scan",
-            "data": {
-              "summary": {
-                "by_severity": {
-                  "total": ${TOTAL},
-                  "critical": ${CRITICAL},
-                  "high":${HIGH},
-                  "medium": ${MEDIUM},
-                  "low": ${LOW}
-                }
-              }
-            }
-          }]
-          EOF
-
-      - name: Print policy input
+        run: echo rw4-job-1
+  rw4-job-2:
+    steps:
+      - name: noop
         uses: docker://alpine:latest
         shell: sh
-        env:
-          ORG: ${{ cloudbees.org.id }}
-          ACCESS_KEY: ${{ cloudbees.api.token }}
-          URL: ${{ cloudbees.api.url }}
-          POLICY_SUBJECT: ${{ steps.make-input.outputs.policy-subject }}
-        run: |
-          echo "$URL"
-          echo "$ORG"
-          echo "Authorization: Bearer $ACCESS_KEY"
-          echo "$POLICY_SUBJECT"
-  policy-evaluation:
-    uses: cloudbees-io/policy-utils/evaluate-policy/workflow.yml@v1
-    needs:
-      - scan-and-evaluate
-    with:
-      input-data: ${{ needs.scan-and-evaluate.outputs.policy-subject }}
-      policy-id: 07963009-a162-4c66-9f64-f5bc18d86de6
+        run: echo rw4-job-2
+  rw4-job-3:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw4-job-3
+  rw4-job-4:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw4-job-4
+  rw4-job-5:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw4-job-5
