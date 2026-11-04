@@ -1,67 +1,36 @@
-##
-## Example of policy using legacy subject data (implicit vulnerability_scan_legacy)
-## 
+name: cbp-69966-rw-6
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: crawl-legacy
 on:
-  workflow_dispatch: {}
-permissions:
-  scm-token-own: read
-  scm-token-org: read
-  id-token: write
+  workflow_call: {}
 jobs:
-  scan-and-evaluate:
+  rw6-job-1:
     steps:
-      - name: checkout-source-code
-        uses: cloudbees-io/checkout@v1
-
-      - name: Run Gosec Scan
-        id: gosec-step
-        uses: cloudbees-io/gosec-plugin@v1
-
-      - id: print-gosec-outputs
-        name: Print gosec outputs
-        uses: docker://alpine:latest
-        run: |
-          echo "Gosec outputs:"
-          echo "Critical: ${{ steps.gosec-step.outputs.critical-count }}"
-          echo "Very high: ${{ steps.gosec-step.outputs.very-high-count }}"
-          echo "High: ${{ steps.gosec-step.outputs.high-count }}"
-          echo "Medium: ${{ steps.gosec-step.outputs.medium-count }}"
-          echo "Low: ${{ steps.gosec-step.outputs.low-count }}"
-
-      # Transform gosec output to policy engine JSON
-      #   critical-count + very-high-count → CRITICAL
-      #   high-count → HIGH
-      #   medium-count → MEDIUM
-      - id: transform-input
-        name: Transform gosec output to policy input
+      - name: noop
         uses: docker://alpine:latest
         shell: sh
-        run: |
-          CRITICAL=$(( ${{ steps.gosec-step.outputs.critical-count }} + ${{ steps.gosec-step.outputs.very-high-count }} ))
-          HIGH=${{ steps.gosec-step.outputs.high-count }}
-          MEDIUM=${{ steps.gosec-step.outputs.medium-count }}
-          cat > /cloudbees/workspace/policy-input.json << EOF
-          {"vulnerabilities":{"counts":{"CRITICAL":${CRITICAL},"HIGH":${HIGH},"MEDIUM":${MEDIUM}}}}
-          EOF
-
-      - name: Print policy input
+        run: echo rw6-job-1
+  rw6-job-2:
+    steps:
+      - name: noop
         uses: docker://alpine:latest
         shell: sh
-        run: |
-          cat /cloudbees/workspace/policy-input.json
-
-      - id: log-data
-        name: Debug logging of env info
+        run: echo rw6-job-2
+  rw6-job-3:
+    steps:
+      - name: noop
         uses: docker://alpine:latest
         shell: sh
-        run: |
-          echo "URL: ${{ cloudbees.api.url }}"
-
-      - name: check-vulnerabilities-with-public-action
-        uses: cloudbees-io/policy-check
-        with:
-          policy: 22f76106-3661-409f-b654-42ab4a052fe4
-          input-file: /cloudbees/workspace/policy-input.json
+        run: echo rw6-job-3
+  rw6-job-4:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw6-job-4
+  rw6-job-5:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw6-job-5
