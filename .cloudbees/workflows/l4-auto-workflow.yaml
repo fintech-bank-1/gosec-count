@@ -5,22 +5,22 @@ on:
   workflow_dispatch: {}
 jobs:
   call-rw-1:
-    uses: ./.cloudbees/workflows/andy-evaluate-policy-test.yaml@main
+    uses: ./.cloudbees/workflows/andy-evaluate-policy-test.yaml
   call-rw-2:
-    uses: ./.cloudbees/workflows/cbp-46374-test.yaml@main
+    uses: ./.cloudbees/workflows/cbp-46374-test.yaml
   call-rw-3:
-    uses: ./.cloudbees/workflows/cbp_47369_1.yaml@main
+    uses: ./.cloudbees/workflows/cbp_47369_1.yaml
   call-rw-4:
-    uses: ./.cloudbees/workflows/cbp_47369_2.yaml@main
+    uses: ./.cloudbees/workflows/cbp_47369_2.yaml
   call-rw-5:
-    uses: ./.cloudbees/workflows/cp-single-check.yaml@main
+    uses: ./.cloudbees/workflows/cp-single-check.yaml
   call-rw-6:
-    uses: ./.cloudbees/workflows/crawl-open.yaml@main
+    uses: ./.cloudbees/workflows/crawl-open.yaml
   call-rw-7:
-    uses: ./.cloudbees/workflows/crawl.yaml@main
+    uses: ./.cloudbees/workflows/crawl.yaml
   call-rw-8:
-    uses: ./.cloudbees/workflows/filter-by-position-test.yaml@main
+    uses: ./.cloudbees/workflows/filter-by-position-test.yaml
   call-rw-9:
-    uses: ./.cloudbees/workflows/gosec-scanner.yaml@main
+    uses: ./.cloudbees/workflows/gosec-scanner.yaml
   call-rw-10:
-    uses: ./.cloudbees/workflows/sonarqube-update-test.yaml@main
+    uses: ./.cloudbees/workflows/sonarqube-update-test.yaml
