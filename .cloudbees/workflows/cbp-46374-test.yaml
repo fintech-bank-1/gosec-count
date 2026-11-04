@@ -1,4 +1,4 @@
-name: cbp-69966-rw-2
+name: cbp-46374-test
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 on:
