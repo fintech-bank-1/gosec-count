@@ -1,37 +1,36 @@
+name: cbp-69966-rw-7
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: gosec-with-policy-check
 on:
-  workflow_dispatch: {}
-permissions:
-  scm-token-own: read
-  scm-token-org: read
-  id-token: write
+  workflow_call: {}
 jobs:
-  scan-and-evaluate:
+  rw7-job-1:
     steps:
-      - name: checkout-source-code
-        uses: cloudbees-io/checkout@v1
-
-      - name: Run Gosec Scan
-        id: gosec-step
-        uses: cloudbees-io/gosec-plugin@v1
-
-      - id: print-gosec-outputs
-        name: Print gosec outputs
+      - name: noop
         uses: docker://alpine:latest
-        run: |
-          echo "Gosec outputs:"
-          echo "Critical: ${{ steps.gosec-step.outputs.critical-count }}"
-          echo "Very high: ${{ steps.gosec-step.outputs.very-high-count }}"
-          echo "High: ${{ steps.gosec-step.outputs.high-count }}"
-          echo "Medium: ${{ steps.gosec-step.outputs.medium-count }}"
-          echo "Low: ${{ steps.gosec-step.outputs.low-count }}"
-          echo "Policy Subject: ${{ steps.gosec-step.outputs.policy-subject }}"
-
-      - name: check-vulnerabilities-with-public-action
-        uses: cloudbees-io/policy-check@main
-        with:
-          policy: 5a383327-7095-48c9-8e8f-a6673c161e7d
-          # input-file: /cloudbees/workspace/policy-input.json
-          input-data: ${{ steps.gosec-step.outputs.policy-subject }}
+        shell: sh
+        run: echo rw7-job-1
+  rw7-job-2:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw7-job-2
+  rw7-job-3:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw7-job-3
+  rw7-job-4:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw7-job-4
+  rw7-job-5:
+    steps:
+      - name: noop
+        uses: docker://alpine:latest
+        shell: sh
+        run: echo rw7-job-5
